@@ -1,4 +1,3 @@
-# services/filters.py
 from datetime import datetime
 from typing import Optional, List, Tuple, Dict, Any, Literal
 
@@ -11,8 +10,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-
-# -------------------- FILTERS --------------------
 
 async def create_filter(
     session: AsyncSession,
@@ -93,8 +90,6 @@ async def get_all_filters(session: AsyncSession) -> List[Filter]:
 
 
 
-# -------------------- FILTER + ADS --------------------
-
 async def add_ad_to_filter(
     session: AsyncSession,
     *,
@@ -113,7 +108,6 @@ async def add_ad_to_filter(
     """
     status, ad = await add_or_update_ad(session, ad_payload)
 
-    # проверяем связку filter <-> ad
     res = await session.execute(
         select(FilterAd).where(
             FilterAd.filter_id == filter_id,
@@ -123,7 +117,6 @@ async def add_ad_to_filter(
     f_ad = res.scalars().first()
 
     if f_ad is None:
-        # создаём новую связь
         f_ad = FilterAd(
             filter_id=filter_id,
             ad_id=ad.id,
@@ -134,7 +127,6 @@ async def add_ad_to_filter(
         await session.commit()
         return status, ad
     else:
-        # если цена уменьшилась
         if ad.last_price is not None and f_ad.seen_price is not None:
             if ad.last_price < f_ad.seen_price:
                 f_ad.seen_price = ad.last_price

@@ -2,7 +2,6 @@ from celery import Celery
 from celery.schedules import crontab
 from utils.logging_config import setup_logging
 
-# Создаём приложение Celery
 celery_app = Celery(
     "lalafo_bot",
     broker="redis://redis:6379/0",
@@ -13,13 +12,11 @@ celery_app = Celery(
     ]
 )
 
-# Конфигурация
 celery_app.conf.update(
     timezone="Asia/Bishkek",
     enable_utc=True,
 )
 
-# Планировщик (beat)
 celery_app.conf.beat_schedule = {
     "check-ads-every-15-min": {
         "task": "utils.tasks.run_process_filters",
@@ -27,6 +24,5 @@ celery_app.conf.beat_schedule = {
     },
 }
 
-# Настройка логирования
 setup_logging()
 

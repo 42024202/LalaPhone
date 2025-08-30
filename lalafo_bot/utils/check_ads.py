@@ -78,11 +78,9 @@ async def process_single_filter(
             )
             await send_safe(bot, flt.user_id, msg)
 
-    # обновляем страницу
     await update_last_page(session, flt.id, next_page)
     await session.commit()
 
-    # если новых нет — шлём уведомление (только если send_empty=True)
     if send_empty and new_ads_count == 0:
         await send_safe(bot, flt.user_id, f"ℹ️ По фильтру «{flt.model}» новых объявлений нет.")
 

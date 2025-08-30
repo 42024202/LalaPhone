@@ -1,4 +1,3 @@
-# parser/lalafo_parser.py
 import asyncio
 import aiohttp
 import logging
@@ -16,9 +15,7 @@ HEADERS = {
 
 
 async def fetch_json(session: aiohttp.ClientSession, params: dict) -> Optional[Dict]:
-    """
-    Запрос к API Lalafo.
-    """
+    """ Запрос к API Lalafo """
     try:
         async with session.get(BASE_URL, params=params, headers=HEADERS) as resp:
             if resp.status != 200:
@@ -72,7 +69,7 @@ async def get_all_items(model_id: int,
             items = await get_items_by_model(session, model_id, page=page, max_price=max_price)
             if not items:
                 logger.info(f"Страница {page} пустая → конец объявлений.")
-                return all_items, 1  # сброс на первую страницу
+                return all_items, 1
             all_items.extend(items)
 
     return all_items, next_page

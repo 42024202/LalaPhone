@@ -104,7 +104,6 @@ async def add_or_update_ad(
 
     ad = await get_ad_by_lalafo_id(session, lalafo_id)
     if ad is None:
-        # создаём новое объявление
         ad = await create_ad(
             session,
             lalafo_id=lalafo_id,
@@ -115,7 +114,6 @@ async def add_or_update_ad(
         )
         return "new", ad
 
-    # обновляем цену, если нужно
     status = await update_ad_price(session, ad=ad, new_price=new_price)
     if status == "price_drop":
         return "price_drop", ad
